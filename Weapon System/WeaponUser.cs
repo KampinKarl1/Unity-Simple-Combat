@@ -42,6 +42,11 @@ namespace WeaponSystem
 
             if (Input.GetMouseButtonDown(0) && currentWeapon != null)
                 currentWeapon.UseWeapon();
+
+            if (Input.GetKeyDown(KeyCode.R) && currentWeapon is Gun)
+            {
+                (currentWeapon as Gun).Reload();
+            }
         }
     }
 }
