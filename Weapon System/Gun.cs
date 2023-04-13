@@ -6,7 +6,7 @@ namespace WeaponSystem
 {
     public class Gun : MonoBehaviour, IWeapon
     {
-        [SerializeField] private Transform firepoint = null;
+       [SerializeField] private Transform firepoint = null;
         internal AudioSource source = null;
         [SerializeField] private SoundBank shotSounds = new SoundBank();
         [SerializeField] private SoundBank emptyMagSounds = new SoundBank();
@@ -24,7 +24,9 @@ namespace WeaponSystem
         [SerializeField] private float range = 100f;
 
         //========DMG===========
-        [Space,Header("Damage")]
+        [Space, Header("Damage")]
+        [SerializeField] private float minDamage = 25f;
+        [SerializeField] private float maxDamage = 75f;
         float[] randomDamages = new float[50];
         int nextDamage = 0;
         float randDam()
@@ -58,10 +60,8 @@ namespace WeaponSystem
 
             for (int i = 0; i < randomDamages.Length; i++)
             {
-                randomDamages[i] = Random.Range(25f, 70f);
+                randomDamages[i] = Random.Range(minDamage, maxDamage);
             }
-
-            reloadRoutine = DoReload();
         }
 
         public void UseWeapon()
@@ -101,11 +101,11 @@ namespace WeaponSystem
             currentAmmo--;
         }
 
-        IEnumerator reloadRoutine;
+        Coroutine reloadRoutine;
 
         internal void Reload() 
         {
-            StartCoroutine(reloadRoutine);
+            reloadRoutine = StartCoroutine(DoReload());
         }
 
         IEnumerator DoReload() 
@@ -155,6 +155,16 @@ namespace WeaponSystem
                 Hitmarker.MarkHit();
                 AudioFeedback.PlayImpactSound();
             }
+        }
+
+        public void MakeActive()
+        {
+
+        }
+
+        public void PutAway()
+        {
+            StopCoroutine(reloadRoutine);
         }
     }
 }
