@@ -5,6 +5,9 @@ The WeaponUser holds all the weapons on an object to allow switching between the
 **Shooting**:
 Put a **Gun** script on the camera or something and make sure to set up a firepoint transform as  a child of the gun.
 
+**GunfireSounds**
+On the gun script theres a class called SoundBank which allows the user to add a list of audioclips from which the gun will choose one at random to play once a shot is fired. If too little time has passed or the gun is out of ammo, there is also a SoundBank for click sounds which does the same thing.
+
 **Ejecting Shells (Launching projectiles)**:
 If you want the gun to **eject shells**, create a shell prefab with a rigidbody to eject from the gun. Place another transform as a child of the gun and put the Launcher script on it with the shell you created as its prefab to launch and the transform itself as the launch point. Then place the object with the launcher script onto the shell ejector field on the gun object.
 
