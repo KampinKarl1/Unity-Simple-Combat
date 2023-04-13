@@ -4,9 +4,8 @@ using UnityEngine;
 
 namespace WeaponSystem
 {
-    public class WeaponUser : MonoBehaviour
+     public class WeaponUser : MonoBehaviour
     {
-      
         [SerializeField] private Transform[] transformsWithWeapons = new Transform[0];
         private IWeapon[] weapons = new IWeapon[0];
         private IWeapon currentWeapon = null;
@@ -16,10 +15,18 @@ namespace WeaponSystem
         {
             var tempWeaps = new List<IWeapon>();
 
+            var audio = GetComponent<AudioSource>();
+
             for (int i = 0; i < transformsWithWeapons.Length; i++)
             {
                 if (transformsWithWeapons[i].TryGetComponent(out IWeapon weapon))
+                {
                     tempWeaps.Add(weapon);
+
+                    if (weapon is Gun)
+                        (weapon as Gun).source = audio;
+                }
+
             }
 
             weapons = tempWeaps.ToArray();
@@ -48,5 +55,6 @@ namespace WeaponSystem
                 (currentWeapon as Gun).Reload();
             }
         }
+
     }
 }
