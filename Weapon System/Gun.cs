@@ -6,7 +6,8 @@ namespace WeaponSystem
 {
     public class Gun : MonoBehaviour, IWeapon
     {
-          [SerializeField] private Transform firepoint = null;
+        [SerializeField] private Transform firepoint = null;
+        internal AudioSource source = null;
         [SerializeField] private SoundBank shotSounds = new SoundBank();
         [SerializeField] private SoundBank emptyMagSounds = new SoundBank();
         [SerializeField] private Launcher shellEjector = null;
@@ -86,12 +87,12 @@ namespace WeaponSystem
 
         private void PlayShotSound()
         {
-            shotSounds.PlayRandom(GetComponent<AudioSource>());
+            shotSounds.PlayRandom(source);
         }
 
         private void PlayEmptySound() 
         {
-            emptyMagSounds.PlayRandom(GetComponent<AudioSource>());
+            emptyMagSounds.PlayRandom(source);
         }
 
         #region ammo
@@ -111,7 +112,13 @@ namespace WeaponSystem
         {
             yield return new WaitForSeconds(reloadTime);
 
-            currentAmmo = maxAmmoPerMagazine;
+            if (totalAmmo < maxAmmoPerMagazine)            
+                currentAmmo = totalAmmo;
+            else
+                currentAmmo = maxAmmoPerMagazine;
+
+            totalAmmo -= currentAmmo;   
+            
         }
 
         #endregion
