@@ -6,10 +6,19 @@ namespace WeaponSystem
 {
     public class Gun : MonoBehaviour, IWeapon
     {
-        [SerializeField] private Transform firepoint = null;
+          [SerializeField] private Transform firepoint = null;
         [SerializeField] private SoundBank shotSounds = new SoundBank();
+        [SerializeField] private SoundBank emptyMagSounds = new SoundBank();
         [SerializeField] private Launcher shellEjector = null;
 
+        [SerializeField] private int currentAmmo = 5;
+
+        //This should go into a data file for guns of this type (An AK47 would generally have 30 rounds in each clip. It doesn't need to be an instance member)
+        [SerializeField] private int maxAmmoPerMagazine = 12;
+        [SerializeField] private int totalAmmo = 100;
+
+
+        [SerializeField] private float reloadTime = 1.0f;
         
         [SerializeField] private float range = 100f;
 
@@ -34,7 +43,7 @@ namespace WeaponSystem
         [SerializeField] private float fireRate = 20f;
         private float timeBetweenShots = 0f;
         private void SetTimeBetweenShots() => timeBetweenShots = 1 / fireRate;
-        private bool CanFire => Time.time >= nextTimeCanFire;
+        private bool CanFire => currentAmmo > 0 && Time.time >= nextTimeCanFire;
         private void ResetShotCD() => nextTimeCanFire = Time.time + timeBetweenShots;
         #endregion
         void OnValidate()
@@ -50,21 +59,29 @@ namespace WeaponSystem
             {
                 randomDamages[i] = Random.Range(25f, 70f);
             }
+
+            reloadRoutine = DoReload();
         }
 
         public void UseWeapon()
         {
-            if (CanFire)
+            if (!CanFire) //CANT fire
             {
-                ResetShotCD();
-
-                FireGun();
-
-                PlayShotSound();
-
-                if (shellEjector)
-                    shellEjector.LaunchProjectile();
+                PlayEmptySound();
+                return; //EXIT THE ROUTINE 
             }
+
+            //Doesn't get here if out of ammo or too little time has passed.
+            ResetShotCD();
+
+            UseAmmo();
+
+            FireGun();
+
+            PlayShotSound();
+
+            if (shellEjector)
+                shellEjector.LaunchProjectile();
         }
 
         private void PlayShotSound()
@@ -72,6 +89,32 @@ namespace WeaponSystem
             shotSounds.PlayRandom(GetComponent<AudioSource>());
         }
 
+        private void PlayEmptySound() 
+        {
+            emptyMagSounds.PlayRandom(GetComponent<AudioSource>());
+        }
+
+        #region ammo
+        private void UseAmmo() 
+        {
+            currentAmmo--;
+        }
+
+        IEnumerator reloadRoutine;
+
+        internal void Reload() 
+        {
+            StartCoroutine(reloadRoutine);
+        }
+
+        IEnumerator DoReload() 
+        {
+            yield return new WaitForSeconds(reloadTime);
+
+            currentAmmo = maxAmmoPerMagazine;
+        }
+
+        #endregion
         private void FireGun()
         {
             RaycastHit[] hits = Physics.RaycastAll(firepoint.position, firepoint.forward, range);
