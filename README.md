@@ -1,4 +1,6 @@
 # Unity-Simple-Combat
+**Weapon Handling**:
+The WeaponUser holds all the weapons on an object to allow switching between them. Not ideal but put all the transforms which have a component that implements IWeapon onto the "transformsWithWeapons" field in the WeaponUser and the script will determine if the transform has a weapon.
 
 **Shooting**:
 Put a **Gun** script on the camera or something and make sure to set up a firepoint transform as  a child of the gun.
