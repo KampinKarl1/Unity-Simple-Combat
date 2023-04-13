@@ -44,7 +44,14 @@ namespace WeaponSystem
             for (int i = 0; i < weapons.Length; i++)
             {
                 if (Input.GetKeyDown((KeyCode)i + 48))
+                {
+                    //deactivate old weapon
+                    currentWeapon.PutAway();
+
+                    //set new weapon
                     currentWeapon = weapons[i];
+                    currentWeapon.MakeActive();
+                }
             }
 
             if (Input.GetMouseButtonDown(0) && currentWeapon != null)
