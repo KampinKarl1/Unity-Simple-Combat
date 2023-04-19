@@ -131,16 +131,16 @@ namespace WeaponSystem
 
             for (int i = 0; i < hits.Length; i++)
             {
-                if (hits[i].collider.TryGetComponent(out Hitbox hitbox))
+                if (hits[i].collider.TryGetComponent(out IDamageable dmgbl))
                 {
-                    bool wasAlive = hitbox.Alive();
+                    bool wasAlive = dmgbl.Alive();
 
-                    hitbox.TakeDamage(new DamageInstance(randDam(), hits[i].transform.position - transform.position));
+                    dmgbl.TakeDamage(new DamageInstance(randDam(), hits[i].transform.position - transform.position));
 
                     gotHit = wasAlive;
 
                     if (!gotKill && wasAlive)
-                        gotKill = !hitbox.Alive();
+                        gotKill = !dmgbl.Alive();
                 }
             }
 
