@@ -10,7 +10,7 @@ To use hitbox, just add the Hitbox component to an object WITH A COLLIDER and NO
 
 **Entities**
 The entity class is used to absorb the damage of a game object composed of multiple hitboxes. For example, on a human-type enemy, you'd have hitboxes on on the arms, legs, chest, head, et cetera. Each hitbox takes damage and can multiply it (damage * multiplier) based on what the body part is (so a headshot is worth a lot more than a hit to the hand) and pass that damage on to the main Entity class.
-*One implementation idea is that you do damage to both the hitbox and the entity so that if you have a Mech, you could disable parts of the body but also accumulate damage on the main unit.*
+*One implementation idea is that you do damage to both the **hitbox and the entity** so that if you have a Mech, you could (when a hitbox 'dies') **disable parts of the body** and accumulate damage on the main unit.*
  You guys can figure that out. I don't want to box anyone in or make what's called "simple combat" into "complex combat, my way."
 
 **Hitmarker**:
