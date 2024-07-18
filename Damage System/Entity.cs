@@ -37,7 +37,7 @@ namespace WeaponSystem
             disableOnDeath[i].enabled = false;
           }
           
-          onDie?.Invoke();
+          onDeath?.Invoke();
         }
   }
 }
