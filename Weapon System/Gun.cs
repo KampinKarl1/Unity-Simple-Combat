@@ -8,8 +8,8 @@ namespace WeaponSystem
     {
        [SerializeField] private Transform firepoint = null;
         internal AudioSource source = null;
-        [SerializeField] private SoundBank shotSounds = new SoundBank();
-        [SerializeField] private SoundBank emptyMagSounds = new SoundBank();
+        [SerializeField] private AudioClip[] shotSounds;
+        [SerializeField] private AudioClip[] emptyMagSounds;
         [SerializeField] private Launcher shellEjector = null;
 
         [SerializeField] private int currentAmmo = 5;
@@ -87,12 +87,12 @@ namespace WeaponSystem
 
         private void PlayShotSound()
         {
-            shotSounds.PlayRandom(source);
+            source.PlayOneShot(shotSounds[Random.Range(0,shotSounds.Length)]);
         }
 
         private void PlayEmptySound() 
         {
-            emptyMagSounds.PlayRandom(source);
+            source.PlayOneShot(emptyMagSounds[Random.Range(0,emptyMagSounds.Length)]);
         }
 
         #region ammo
@@ -148,12 +148,12 @@ namespace WeaponSystem
             {
                 Hitmarker.MarkKill();
                 //todo play kill sound
-                AudioFeedback.PlayImpactSound();
+               // AudioFeedback.PlayImpactSound();
             }
             else if (gotHit)
             {
                 Hitmarker.MarkHit();
-                AudioFeedback.PlayImpactSound();
+              // AudioFeedback.PlayImpactSound();
             }
         }
 
