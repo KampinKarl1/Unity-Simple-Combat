@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace WeaponSystem
 {
-  public class Entity : Monobehaviour, IDamageable
+  public class Entity : MonoBehaviour, IDamageable
   {
     [SerializeField] private float health = 100f;
   
