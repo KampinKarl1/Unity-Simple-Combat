@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.AI;
-public static class Vec3_Utils 
+public static class Vec3_Utils
 {
-    public static Vector3 RandomizeAll(float min, float max) 
+    public static Vector3 RandomizeAll(float min, float max)
     {
         float x, y, z;
         x = Random.Range(min, max);
@@ -16,6 +16,45 @@ public static class Vec3_Utils
         bool navigable = NavMesh.SamplePosition(pos, out NavMeshHit hit, 1.0f, NavMesh.AllAreas);
         y = hit.position.y;
         return navigable;
+    }
+
+    /// <summary>
+    /// Create a randomized Vector3 using floats. 
+    /// </summary>
+    /// <returns>New Vector3 with randomized x, y, and z coordinates.</returns>
+    public static Vector3 RandomizedVector3(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax) 
+    {
+        return new Vector3(
+            Random.Range(xMin, xMax),
+            Random.Range(yMin, yMax),
+            Random.Range(zMin, zMax));
+    }
+
+    /// <summary>
+    /// Create a randomized Vector3 using floats. 
+    /// </summary>
+    /// <returns>New Vector3 with randomized x, y, and z coordinates.</returns>
+    public static Vector3 RandomizedVector3(ParticleSystem.MinMaxCurve x, ParticleSystem.MinMaxCurve y, ParticleSystem.MinMaxCurve z)
+    {
+        return RandomizedVector3(x.constantMin, x.constantMax, y.constantMin, y.constantMax, z.constantMin, z.constantMax);
+    }
+
+    /// <summary>
+    /// Enter a positive float or 0 in each coordinate. Min is the negative of the coordinate entered.
+    /// </summary>
+    /// <param name="limits">An x of 10.0f could be anything from -10.0f to 10.0f.</param>
+    /// <returns></returns>
+    public static Vector3 RandomizedVector3(Vector3 limits) 
+    {
+        return new Vector3(
+            Random.Range(-limits.x, limits.x),
+            Random.Range(-limits.y, limits.y),
+            Random.Range(-limits.z, limits.z));
+    }
+
+    public static Quaternion RandomizedRotation(Vector3 randomizedEuler) 
+    {
+        return Quaternion.Euler(RandomizedVector3(randomizedEuler));
     }
 
     /// <summary>
@@ -46,7 +85,7 @@ public static class Vec3_Utils
         return pos;
     }
 
-    public static Vector3 RandPosNearTransform(Transform me, float maxDist) 
+    public static Vector3 RandPosNearTransform(Transform me, float maxDist)
     {
         float dist = maxDist / 2f;
 
